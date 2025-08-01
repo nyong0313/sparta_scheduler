@@ -28,14 +28,7 @@ public class ScheduleService {
         );
 
         Schedule savedSchedule = scheduleRepository.save(schedule);
-        return new ScheduleResponseDto(
-                savedSchedule.getId(),
-                savedSchedule.getTitle(),
-                savedSchedule.getWriterName(),
-                savedSchedule.getContent(),
-                savedSchedule.getCreatedAt(),
-                savedSchedule.getUpdatedAt()
-        );
+        return ScheduleResponseDto.from(savedSchedule);
     }
 
     @Transactional(readOnly = true)
@@ -43,16 +36,11 @@ public class ScheduleService {
         // findAll 반환값은 List
         List<Schedule> scheduleList = scheduleRepository.findAll();
         List<ScheduleResponseDto> scheduleResponseDtoList = new ArrayList<>();
+
         for (Schedule schedule : scheduleList) {
-            scheduleResponseDtoList.add(new ScheduleResponseDto(
-                    schedule.getId(),
-                    schedule.getTitle(),
-                    schedule.getWriterName(),
-                    schedule.getContent(),
-                    schedule.getCreatedAt(),
-                    schedule.getUpdatedAt()
-            ));
+            scheduleResponseDtoList.add(ScheduleResponseDto.from(schedule));
         }
+
         return scheduleResponseDtoList;
     }
 
@@ -60,14 +48,8 @@ public class ScheduleService {
     public ScheduleResponseDto getScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
-        return new ScheduleResponseDto(
-                schedule.getId(),
-                schedule.getTitle(),
-                schedule.getWriterName(),
-                schedule.getContent(),
-                schedule.getCreatedAt(),
-                schedule.getUpdatedAt()
-        );
+
+        return ScheduleResponseDto.from(schedule);
     }
 
     @Transactional
@@ -78,13 +60,7 @@ public class ScheduleService {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 
         existingSchedule.updateSchedule(updateScheduleRequestDto.getTitle(), updateScheduleRequestDto.getWriterName());
-        return new ScheduleResponseDto(
-                existingSchedule.getId(),
-                existingSchedule.getTitle(),
-                existingSchedule.getWriterName(),
-                existingSchedule.getContent(),
-                existingSchedule.getCreatedAt(),
-                existingSchedule.getUpdatedAt()
-        );
+
+        return ScheduleResponseDto.from(scheduleRepository.save(existingSchedule));
     }
 }
