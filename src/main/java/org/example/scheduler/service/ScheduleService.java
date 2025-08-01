@@ -2,6 +2,7 @@ package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.controller.dto.ScheduleRequestDto;
+import org.example.scheduler.controller.dto.UpdateScheduleRequestDto;
 import org.example.scheduler.entity.Schedule;
 import org.example.scheduler.repository.ScheduleRepository;
 import org.example.scheduler.service.dto.ScheduleResponseDto;
@@ -66,6 +67,24 @@ public class ScheduleService {
                 schedule.getContent(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
+        );
+    }
+
+    @Transactional
+    public ScheduleResponseDto updateScheduleById(Long id, UpdateScheduleRequestDto updateScheduleRequestDto) {
+        Schedule existingSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
+        if (!existingSchedule.getPassword().equals(updateScheduleRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+
+        existingSchedule.updateSchedule(updateScheduleRequestDto.getTitle(), updateScheduleRequestDto.getWriterName());
+        return new ScheduleResponseDto(
+                existingSchedule.getId(),
+                existingSchedule.getTitle(),
+                existingSchedule.getWriterName(),
+                existingSchedule.getContent(),
+                existingSchedule.getCreatedAt(),
+                existingSchedule.getUpdatedAt()
         );
     }
 }
