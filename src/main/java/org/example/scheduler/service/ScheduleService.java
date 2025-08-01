@@ -1,6 +1,7 @@
 package org.example.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduler.controller.dto.DeleteScheduleRequestDto;
 import org.example.scheduler.controller.dto.ScheduleRequestDto;
 import org.example.scheduler.controller.dto.UpdateScheduleRequestDto;
 import org.example.scheduler.entity.Schedule;
@@ -62,5 +63,15 @@ public class ScheduleService {
         existingSchedule.updateSchedule(updateScheduleRequestDto.getTitle(), updateScheduleRequestDto.getWriterName());
 
         return ScheduleResponseDto.from(scheduleRepository.save(existingSchedule));
+    }
+
+    @Transactional
+    public void deleteScheduleById(Long id, DeleteScheduleRequestDto deleteScheduleRequestDto) {
+        Schedule existingSchedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
+        if (!existingSchedule.getPassword().equals(deleteScheduleRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+
+        scheduleRepository.deleteById(id);
     }
 }
