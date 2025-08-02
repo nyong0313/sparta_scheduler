@@ -1,12 +1,10 @@
 package org.example.scheduler.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,6 +18,9 @@ public class Schedule extends BaseEntity {
     private String writerName;
     private String password;
     private String content;
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Schedule(String title, String writerName, String password, String content) {
         this.title = title;
