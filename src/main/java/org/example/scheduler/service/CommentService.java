@@ -23,7 +23,7 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + scheduleId));
 
         if(existingSchedule.getComments().size() >= 10)
-            throw new IllegalStateException("댓글은 최대 10개까지만 작성할 수 있습니다.");
+            throw new IllegalArgumentException("댓글은 최대 10개까지만 작성할 수 있습니다.");
 
         Comment comment = new Comment(
                 commentRequestDto.getWriterName(),
