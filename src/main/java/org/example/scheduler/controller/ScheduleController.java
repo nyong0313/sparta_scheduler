@@ -1,5 +1,6 @@
 package org.example.scheduler.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.controller.dto.DeleteScheduleRequestDto;
 import org.example.scheduler.controller.dto.ScheduleRequestDto;
@@ -20,7 +21,7 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ApiResponse<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ApiResponse<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
         return ApiResponse.ok(scheduleService.saveSchedule(scheduleRequestDto));
     }
 
@@ -37,7 +38,7 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ApiResponse<ScheduleResponseDto> updateSchedule(
             @PathVariable Long scheduleId,
-            @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto)
+            @Valid @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto)
     {
         return ApiResponse.ok(scheduleService.updateScheduleById(scheduleId, updateScheduleRequestDto));
     }
@@ -45,7 +46,7 @@ public class ScheduleController {
     @DeleteMapping("/{scheduleId}")
     public ApiResponse<ScheduleResponseDto> deleteSchedule(
             @PathVariable Long scheduleId,
-            @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto)
+            @Valid @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto)
     {
         scheduleService.deleteScheduleById(scheduleId, deleteScheduleRequestDto);
         return ApiResponse.of(HttpStatus.OK, "일정이 삭제되었습니다. ID: " + scheduleId);

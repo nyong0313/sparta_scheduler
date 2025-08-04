@@ -1,5 +1,6 @@
 package org.example.scheduler.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduler.controller.dto.CommentRequestDto;
 import org.example.scheduler.service.CommentService;
@@ -15,7 +16,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ApiResponse<CommentResponseDto> saveSchedule(@PathVariable Long scheduleId, @RequestBody CommentRequestDto commentRequestDto) {
+    public ApiResponse<CommentResponseDto> saveSchedule(@PathVariable Long scheduleId, @Valid @RequestBody CommentRequestDto commentRequestDto) {
         return ApiResponse.ok(commentService.saveComment(scheduleId, commentRequestDto));
     }
 }
